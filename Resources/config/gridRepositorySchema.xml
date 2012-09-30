@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<element name="gridSystemRepository" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+    <!-- START GRID SYSTEMS -->
+    <oneOrMore>
+        <element name="gridSystem" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+            <attribute name="name"><text /></attribute>
+            <attribute name="template"><text/></attribute>
+            <attribute name="output-path"><text /></attribute>
+            <optional><attribute name="min-text-size"><data type="float" /></attribute></optional>
+            <optional><attribute name="max-text-size"><data type="float" /></attribute></optional>
+            <interleave>
+                
+                <!-- Extra templates to get system data for processing -->
+                <optional>
+                    <element name="files">
+                        <oneOrMore>
+                            <element name="file">
+                                <attribute name="template"><text /></attribute>
+                                <attribute name="output-path"><text /></attribute>
+                            </element>
+                        </oneOrMore>
+                    </element>
+                </optional>
+                
+                <!-- GRID DEFINITIONS AND GRID -->
+                
+                <grammar>
+                    <start>
+                        <element name="grids">
+                            <oneOrMore>
+                                <element name="grid">
+                                    <ref name="gridContent" />
+                                </element>
+                            </oneOrMore>
+                        </element>
+                    </start>
+
+                    <define name="gridContent" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+                        <attribute name="start-text-size"><data type="float" /></attribute>
+                        <optional><attribute name="max-text-size"><data type="float" /></attribute></optional>
+                        <optional><attribute name="margin"><data type="int" /></attribute></optional>
+                        <optional><attribute name="is-one-call"><data type="boolean" /></attribute></optional>
+
+                        <attribute name="unit-count"><data type="int" /></attribute>
+                        <attribute name="measure-unit-count"><data type="int" /></attribute>
+
+                        <choice>
+                            <group>
+                                <attribute name="unit-width"><data type="int" /></attribute>
+                                <attribute name="padding-width"><data type="int" /></attribute>
+                                <attribute name="gutter-width"><data type="int" /></attribute>
+                            </group>
+                            <group>
+                                <attribute name="measure-width">
+                                    <a:documentation>How many pixels the measure should occupy in the grid. (To set this properly, you must know the font and font size (start-text-size) that will be used.)</a:documentation>
+                                    <data type="int" />
+                                </attribute>
+                                <attribute name="padding-percentage">
+                                    <a:documentation>How wide should padding be, as a percentage of the measure's width. This is an optical correction so should always be small; about half a percent.</a:documentation>
+                                    <data type="float" />
+                                </attribute>
+                                <attribute name="gutter-percentage"><data type="float" /></attribute>
+                            </group>
+                        </choice>
+                    </define>
+                </grammar>
+
+                <!-- END GRID DEFINITIONS AND GRID -->
+                
+                <!-- START ROLES, OBJECTS, AND CONTEXTS -->
+                <grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+                    <start>
+                        <interleave>
+                            <element name="roles">
+                                <zeroOrMore>
+                                    <element name="role">
+                                        <attribute name="name"><text /></attribute>
+                                        <ref name="base-declarations" />
+                                        <ref name="declaration-set" />
+                                    </element>
+                                </zeroOrMore>
+                            </element>
+         
+                            <element name="content-objects">
+                                <zeroOrMore>
+                                    <element name="object">
+                                        <attribute name="selector"><text /></attribute>
+                                        <ref name="base-declarations" />
+                                        <ref name="declaration-set" />
+                                    </element>
+                                </zeroOrMore>
+                            </element> 
+                            
+                            <element name="surroundings">
+                                <zeroOrMore>
+                                    <element name="surrounding">
+                                        <attribute name="name"><text /></attribute>
+                                        <ref name="base-declarations" />
+                                        <ref name="declaration-set" />
+                                    </element>
+                                </zeroOrMore>
+                            </element>
+                        </interleave>
+                    </start>
+                    
+                    <define name="declaration-set">
+                        <oneOrMore>
+                            <element name="declarations">
+                                <attribute name="grid"><data type="int" /></attribute>
+                                <oneOrMore>
+                                    <element name="declaration">
+                                        <attribute name="key"><text /></attribute>
+                                        <attribute name="value"><text /></attribute>
+                                    </element>
+                                </oneOrMore>
+                            </element>
+                        </oneOrMore>
+                    </define>
+                    <define name="base-declarations">
+                        <optional>
+                            <element name="declarations">
+                                <attribute name="base">
+                                    <value type="boolean">true</value>
+                                </attribute>
+                                    <oneOrMore>
+                                        <element name="declaration">
+                                            <attribute name="key"><text /></attribute>
+                                            <attribute name="value"><text /></attribute>
+                                        </element>
+                                    </oneOrMore>
+                            </element>
+                        </optional>
+                    </define>
+                </grammar>
+                <!-- END ROLES, OBJECTS AND CONTEXTS -->
+
+            </interleave>
+
+        </element>
+    </oneOrMore>
+    <!-- END GRID SYSTEMS -->
+</element>

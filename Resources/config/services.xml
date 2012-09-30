@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="erd_grid_system.repository" class="ERD\GridSystemBundle\Model\GridSystemRepository" factory-service="erd_grid_system.repository_factory" factory-method="getRepository"/> 
+        
+        <!-- Will be dynamically amended by the bundle extension to have the arguments it needs from the config -->
+        <service id="erd_grid_system.repository_factory" class="ERD\GridSystemBundle\DependencyInjection\GridSystemRepositoryFactory" />
+        
+        <!-- Add cache warmer with preconfigured controller -->
+        <service id="erd_grid_system.cache_warmer" class="ERD\GridSystemBundle\CacheWarmer\GridSystemRepositoryCacheWarmer">
+            <argument type="service" id="erd_grid_system.repository" />
+            <argument type="service" id="erd_grid_system.controller" />
+            <tag name="kernel.cache_warmer" />
+        </service>
+        
+        <service id="erd_grid_system.controller" class="ERD\GridSystemBundle\Controller\GridController" public="false">
+            <argument type="service" id="templating" />
+        </service>
+                
+    </services>
+</container>
